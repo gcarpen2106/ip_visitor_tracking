@@ -7,7 +7,7 @@ class IPVisitorTracking(models.Model):
     _description = 'Seguimiento de Visitantes IP'
     _rec_name = 'ip_address'
     
-    api_key = fields.Char(string='Clave API', required=True, help='Tu clave API de ipgeolocation.io', default='c3d4e8f2a1b9e5f7d6c8a2b4e9f3d1a7')
+    api_key = fields.Char(string='Clave API', required=True, help='Tu clave API de ipgeolocation.io')
     ip_address = fields.Char(string='IP del Visitante', readonly=True)
     country = fields.Char(string='País', readonly=True)
     city = fields.Char(string='Ciudad', readonly=True)
