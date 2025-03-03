@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Acción -->
+        <record id="action_ip_visitor_tracking" model="ir.actions.act_window">
+            <field name="name">Seguimiento de Visitantes</field>
+            <field name="res_model">ip.visitor.tracking</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menú -->
+        <menuitem id="menu_ip_visitor_tracking_root" 
+                  name="Seguimiento de Visitantes IP" 
+                  sequence="20" 
+                  web_icon="ip_visitor_tracking,static/description/icon.png" 
+                  groups="base.group_system"/>
+                  
+        <menuitem id="menu_ip_visitor_tracking" 
+                  name="Visitantes" 
+                  parent="menu_ip_visitor_tracking_root" 
+                  action="action_ip_visitor_tracking" 
+                  sequence="10"/>
+
+        <!-- Vista lista -->
+        <record id="view_ip_visitor_tracking_tree" model="ir.ui.view">
+            <field name="name">ip.visitor.tracking.tree</field>
+            <field name="model">ip.visitor.tracking</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="ip_address"/>
+                    <field name="country"/>
+                    <field name="city"/>
+                    <field name="isp"/>
+                    <field name="organization"/>
+                    <field name="visit_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista formulario -->
+        <record id="view_ip_visitor_tracking_form" model="ir.ui.view">
+            <field name="name">ip.visitor.tracking.form</field>
+            <field name="model">ip.visitor.tracking</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="get_visitor_location" string="Obtener Geolocalización" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="api_key" password="True" placeholder="Introduce tu clave API de ipgeolocation.io"/>
+                        </group>
+                        <group string="Información del Visitante" attrs="{'invisible': [('ip_address', '=', False)]}">
+                            <group>
+                                <field name="ip_address"/>
+                                <field name="country"/>
+                                <field name="city"/>
+                                <field name="visit_time"/>
+                            </group>
+                            <group>
+                                <field name="latitude"/>
+                                <field name="longitude"/>
+                                <field name="isp"/>
+                                <field name="organization"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista búsqueda -->
+        <record id="view_ip_visitor_tracking_search" model="ir.ui.view">
+            <field name="name">ip.visitor.tracking.search</field>
+            <field name="model">ip.visitor.tracking</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="ip_address"/>
+                    <field name="country"/>
+                    <field name="city"/>
+                    <field name="isp"/>
+                    <separator/>
+                    <filter string="Último Mes" name="last_month" domain="[('visit_time','&gt;=', (context_today() + relativedelta(months=-1)).strftime('%Y-%m-01'))]"/>
+                    <group expand="0" string="Agrupar Por">
+                        <filter string="País" name="group_by_country" context="{'group_by': 'country'}"/>
+                        <filter string="Proveedor de Servicios" name="group_by_isp" context="{'group_by': 'isp'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>
